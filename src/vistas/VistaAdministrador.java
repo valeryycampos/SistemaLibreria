@@ -4,7 +4,7 @@
  */
 package vistas;
 
-import controlador.Controlador;
+import modelo.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -62,18 +62,16 @@ public class VistaAdministrador extends javax.swing.JFrame {
         }
         catch(Exception ex){
              JOptionPane.showMessageDialog(null,ex.getMessage());
-         }
-    
+         }    
     }
     
-      private void LimpiarTablaUsuarios() {
+    private void LimpiarTablaUsuarios() {
         DefaultTableModel tmp = (DefaultTableModel) jtableUsuarios.getModel();
         int fila = tablaus.getRowCount();
         for (int i = 0; i < fila; i++) {
             tmp.removeRow(0);
         }
-    }
-      
+    }      
       
     /**
      * This method is called from within the constructor to initialize the form.
@@ -163,15 +161,15 @@ public class VistaAdministrador extends javax.swing.JFrame {
         jTextField22 = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jtableCategorias = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        txtIdcate = new javax.swing.JTextField();
+        txtTipo = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
+        btnAgregarCate = new javax.swing.JButton();
+        btnActualizarCate = new javax.swing.JButton();
+        btnEliminarCate = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable5 = new javax.swing.JTable();
@@ -791,18 +789,20 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jtableCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "ID", "TIPO"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jtableCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtableCategoriasMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jtableCategorias);
 
         jLabel11.setText("ID:");
 
@@ -810,11 +810,26 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jButton10.setText("Agregar");
+        btnAgregarCate.setText("Agregar");
+        btnAgregarCate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCateActionPerformed(evt);
+            }
+        });
 
-        jButton11.setText("Actualizar");
+        btnActualizarCate.setText("Actualizar");
+        btnActualizarCate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarCateActionPerformed(evt);
+            }
+        });
 
-        jButton12.setText("Eliminar");
+        btnEliminarCate.setText("Eliminar");
+        btnEliminarCate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -828,18 +843,18 @@ public class VistaAdministrador extends javax.swing.JFrame {
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtIdcate, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField10))
+                                .addComponent(txtTipo))
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jButton10)
+                                .addComponent(btnAgregarCate)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton11))))
+                                .addComponent(btnActualizarCate))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(94, 94, 94)
-                        .addComponent(jButton12)))
+                        .addComponent(btnEliminarCate)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(53, 53, 53)
@@ -849,29 +864,26 @@ public class VistaAdministrador extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addGap(54, 54, 54)
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel11)
-                                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtIdcate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(18, 18, 18)
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel12)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(87, 87, 87)
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton10)
-                                .addComponent(jButton11))
+                                .addComponent(btnAgregarCate)
+                                .addComponent(btnActualizarCate))
                             .addGap(32, 32, 32)
-                            .addComponent(jButton12))
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnEliminarCate)
+                            .addGap(44, 44, 44))))
                 .addContainerGap(244, Short.MAX_VALUE))
         );
 
@@ -1270,26 +1282,25 @@ public class VistaAdministrador extends javax.swing.JFrame {
          email=txtEmail.getText();
          contraseña=txtContraseña.getText();
         
-        Controlador controlador=new Controlador();
-         int id=controlador.insertarDatos(dni, nombres, apellidos, direccion, telefono, email, contraseña);
+        UsuarioDAO usuariodao=new UsuarioDAO();
+         int id=usuariodao.insertarDatos(dni, nombres, apellidos, direccion, telefono, email, contraseña);
          cargarUsuarios();
-         limpiar();
+         limpiarUsuario();
     }//GEN-LAST:event_btnAgregarUActionPerformed
 
     private void btnEliminarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUActionPerformed
        if (JOptionPane.showConfirmDialog(rootPane, "Se eliminará el registro, ¿desea continuar?",
         "Eliminar Registro", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-               Controlador controlador=new Controlador();
+               UsuarioDAO usuariodao=new UsuarioDAO();
                int id=Integer.parseInt(txtId.getText());
-               controlador.eliminarUsuario(id);
+               usuariodao.eliminarUsuario(id);
                cargarUsuarios();
-               limpiar();
-       }
-       
+               limpiarUsuario();
+       }       
     }//GEN-LAST:event_btnEliminarUActionPerformed
     
-    public void limpiar(){
-          txtId.setText("");
+    public void limpiarUsuario(){
+        txtId.setText("");
         txtDni.setText("");
         txtNombres.setText("");
         txtApellidos.setText("");
@@ -1297,8 +1308,9 @@ public class VistaAdministrador extends javax.swing.JFrame {
         txtTelefono.setText("");
         txtEmail.setText("");
         txtContraseña.setText("");
-        txtDni.requestFocus();
+        txtDni.requestFocus();        
     }
+    
     private void btnActualizarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarUActionPerformed
          String dni,nombres,apellidos,direccion,telefono,email,contraseña;int id;
          id=Integer.parseInt(txtId.getText());
@@ -1310,10 +1322,10 @@ public class VistaAdministrador extends javax.swing.JFrame {
          email=txtEmail.getText();
          contraseña=txtContraseña.getText();
         
-        Controlador controlador=new Controlador();
-         controlador.actualizarUsuario(id,dni, nombres, apellidos, direccion, telefono, email, contraseña);
+        UsuarioDAO usuariodao=new UsuarioDAO();
+         usuariodao.actualizarUsuario(id,dni, nombres, apellidos, direccion, telefono, email, contraseña);
          cargarUsuarios();
-          limpiar();
+          limpiarUsuario();
     }//GEN-LAST:event_btnActualizarUActionPerformed
 
     private void jtableUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtableUsuariosMouseClicked
@@ -1326,10 +1338,88 @@ public class VistaAdministrador extends javax.swing.JFrame {
         txtTelefono.setText(jtableUsuarios.getModel().getValueAt(fila,5).toString());
         txtEmail.setText(jtableUsuarios.getModel().getValueAt(fila,6).toString());
         txtContraseña.setText(jtableUsuarios.getModel().getValueAt(fila,7).toString());        
-        jComboBox1.setSelectedItem(jtableUsuarios.getModel().getValueAt(fila,8).toString());
-                
+        jComboBox1.setSelectedItem(jtableUsuarios.getModel().getValueAt(fila,8).toString());                
     }//GEN-LAST:event_jtableUsuariosMouseClicked
 
+    public void cargarCategorias(){
+        LimpiarTablaCategorias();
+        Connection con = conexionBD.getConnection();
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from categorias");
+            Object[] ob = new Object[3];
+            int i=0;
+            while (rs.next()) {
+                 ob[0]=rs.getInt(1)+"";
+                 ob[1]=rs.getString(2);
+                tablaus.addRow(ob);
+                i++;
+            }            
+            jtableUsuarios.setModel(tablaus);
+            rs.close();
+            stmt.close();
+            con.close();
+        }
+        catch(Exception ex){
+             JOptionPane.showMessageDialog(null,ex.getMessage());
+         }    
+    }
+    
+    private void LimpiarTablaCategorias() {
+        DefaultTableModel tmp = (DefaultTableModel) jtableCategorias.getModel();
+        int fila = tablaus.getRowCount();
+        for (int i = 0; i < fila; i++) {
+            tmp.removeRow(0);
+        }
+    }
+    
+    private void btnAgregarCateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCateActionPerformed
+        if(txtTipo.getText().length()==0){
+                JOptionPane.showMessageDialog(null, "Ingresar tipo de categoria");
+               txtTipo.requestFocus();
+               return;
+        }        
+         String tipo;
+         tipo=txtTipo.getText();
+        
+        CategoriasDAO categoriasdao=new CategoriasDAO();
+         int id=categoriasdao.insertarCategorias(tipo);
+         cargarUsuarios();
+         limpiarCategorias();
+    }//GEN-LAST:event_btnAgregarCateActionPerformed
+
+    private void jtableCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtableCategoriasMouseClicked
+        int fila = jtableCategorias.getSelectedRow();
+        txtIdcate.setText(jtableCategorias.getModel().getValueAt(fila,0).toString());
+        txtTipo.setText(jtableCategorias.getModel().getValueAt(fila,1).toString());       
+    }//GEN-LAST:event_jtableCategoriasMouseClicked
+
+    private void btnEliminarCateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCateActionPerformed
+        if (JOptionPane.showConfirmDialog(rootPane, "Se eliminará el registro, ¿desea continuar?",
+        "Eliminar Registro", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+               CategoriasDAO categoriasdao=new CategoriasDAO();
+               int id=Integer.parseInt(txtIdcate.getText());
+               categoriasdao.eliminarCategorias(id);
+               cargarCategorias();
+               limpiarCategorias();
+       }
+    }//GEN-LAST:event_btnEliminarCateActionPerformed
+
+    private void btnActualizarCateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCateActionPerformed
+        String tipo;int id;
+        id=Integer.parseInt(txtIdcate.getText());
+        tipo=txtTipo.getText();
+        
+        CategoriasDAO categoriasdao=new CategoriasDAO();
+        categoriasdao.actualizarCategorias(id,tipo);
+        cargarCategorias();
+        limpiarCategorias();
+    }//GEN-LAST:event_btnActualizarCateActionPerformed
+    
+    public void limpiarCategorias(){
+        txtIdcate.setText("");
+        txtTipo.setText("");       
+    }
     /**
      * @param args the command line arguments
      */
@@ -1367,14 +1457,14 @@ public class VistaAdministrador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarCate;
     private javax.swing.JButton btnActualizarU;
+    private javax.swing.JButton btnAgregarCate;
     private javax.swing.JButton btnAgregarU;
+    private javax.swing.JButton btnEliminarCate;
     private javax.swing.JButton btnEliminarU;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
@@ -1459,13 +1549,11 @@ public class VistaAdministrador extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
     private javax.swing.JTable jTable6;
     private javax.swing.JTable jTable7;
     private javax.swing.JTable jTable9;
-    private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
@@ -1489,7 +1577,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField31;
     private javax.swing.JTextField jTextField32;
     private javax.swing.JTextField jTextField33;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTable jtableCategorias;
     private javax.swing.JTable jtableUsuarios;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtContraseña;
@@ -1497,7 +1585,9 @@ public class VistaAdministrador extends javax.swing.JFrame {
     private javax.swing.JTextField txtDni;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtIdcate;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtTelefono;
+    private javax.swing.JTextField txtTipo;
     // End of variables declaration//GEN-END:variables
 }

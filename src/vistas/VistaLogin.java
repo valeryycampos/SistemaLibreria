@@ -1,17 +1,16 @@
 
 package vistas;
 import modelo.*;
-import controlador.*;
 import javax.swing.JOptionPane;
 
 public class VistaLogin extends javax.swing.JFrame {
     
-          private Controlador controlador;
+          private UsuarioDAO usuariodao;
 
           public VistaLogin() {
             initComponents();
             this.setLocationRelativeTo(null);
-            controlador=new Controlador();
+            usuariodao=new UsuarioDAO();
             
          }
     
@@ -421,7 +420,7 @@ public class VistaLogin extends javax.swing.JFrame {
         
         if( tipoUsuario.equalsIgnoreCase("Administrador")){
                 tipoUsuario="ADMIN";
-                 boolean res=controlador.validarCredenciales(email, contraseña, tipoUsuario);
+                 boolean res=usuariodao.validarCredenciales(email, contraseña, tipoUsuario);
 
                 if(res==true){
                         JOptionPane.showMessageDialog(null,"Ingreso correcto");
@@ -434,7 +433,7 @@ public class VistaLogin extends javax.swing.JFrame {
         }
         if( tipoUsuario.equalsIgnoreCase("Cliente")){
                 tipoUsuario="CLIENT";
-                   boolean res=controlador.validarCredenciales(email, contraseña, tipoUsuario);
+                   boolean res=usuariodao.validarCredenciales(email, contraseña, tipoUsuario);
 
                 if(res==true){
                         JOptionPane.showMessageDialog(null,"Ingreso correcto");
@@ -489,8 +488,8 @@ public class VistaLogin extends javax.swing.JFrame {
          email=txtEmail.getText();
          contraseña=txtContraseña.getText();
          
-        Controlador controlador=new Controlador();
-        controlador.insertarDatos(dni, nombres, apellidos, direccion, telefono, email, contraseña);
+        UsuarioDAO usuariodao=new UsuarioDAO();
+        usuariodao.insertarDatos(dni, nombres, apellidos, direccion, telefono, email, contraseña);
         
     }//GEN-LAST:event_btnCrearUsuarioActionPerformed
 
